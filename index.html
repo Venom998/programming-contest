@@ -29,12 +29,7 @@
                                 
                                 console.log("end stream");
 
-                                var video = document.querySelector('#MyStream');
-                                video.srcObject = stream;
-                                video.onloadedmetadata = function(e) 
-                                    {
-                                    video.play();
-                                    };
+                                
                             },
                             function(err) {
                                 console.log("The following error occurred: " + err.name);
@@ -46,6 +41,15 @@
 
 
                     console.log("stream");
+
+                    clientSocket.on('stream',(stream)=>{
+                        var video = document.querySelector('#MyStream');
+                        video.srcObject = stream;
+                        video.onloadedmetadata = function(e) 
+                            {
+                            video.play();
+                            };
+                    });
 
                     
 
