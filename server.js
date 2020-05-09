@@ -3,8 +3,9 @@ var io = require('socket.io').listen(app);
 var fs = require('fs');
 var peers = [];
 var peerSPDs = [];
+var port = process.env.PORT || 3000;
 
-app.listen(80);
+app.listen(port);
 
 function handler(req, res){
     fs.readFile("index.html",
