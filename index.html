@@ -1,0 +1,90 @@
+<html>
+    <head>
+
+        <title>Диплом</title>
+        <script src="socket.io/socket.io.js"></script>
+        <script>
+            var clientSocket =null;
+            window.onload = function(){
+
+                var otherPeers = [];
+                
+                var offerSent = false;
+                var stream =null;
+
+
+
+                
+                    navigator.getUserMedia = navigator.getUserMedia ||
+                            navigator.webkitGetUserMedia ||
+                            navigator.mozGetUserMedia;
+                    window.URL = window.URL || window.webkitURL;
+                    console.log("stream");
+
+                    if (navigator.getUserMedia) {
+                        navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
+                            function(stream) {
+                                const video = document.getElementById('myStream');
+                                const videoTracks = stream.getVideoTracks();
+                                
+                                console.log(`Using video device: ${videoTracks[0].label}`);
+                                window.stream = stream; // make variable available to browser console
+                                video.srcObject = stream;
+  
+                              
+
+                                //pc.addStream(stream);
+                                setupClient();
+                            },
+                            function(err) {
+                                console.log("The following error occurred: " + err.name);
+                            }
+                        );
+                    } else {
+                    console.log("getUserMedia not supported");
+                    }
+
+                   
+                
+
+                function setupClient(){
+                    clientSocket = io.connect('http://192.168.43.245:8001');
+
+
+
+                    function gotOfferDescription(desc){
+                        pc.setLocalDescription(desc);
+                        clientSocket.emit('server_socket', {type:'description', info:desc});
+                    }
+
+                    function gotAnswerDescription(desc){
+                        pc.setLocalDescription(desc);
+                        clientSocket.emit('server_socket', {type:'description', info:desc});
+                    }
+
+                    pc.onicecandidate = function(event){
+                        if(event.candidate){
+                            clientSocket.emit('server_socket', {type:'candidate', info:event.candidate});
+                        }
+                    };
+
+                    pc.onaddstream = function(el){
+                        document.getElementById('videostreamOutput').src = webkitURL.createObjectURL(e.stream);
+                    };
+
+                    pc.onerror = function(){
+                        //error
+                    };
+                };
+
+                
+            };
+            
+        </script>
+    </head>
+    <body>
+        <h1>webrtc</h1>
+        <video id="videostreamOutput" width="300" autoplay playsinline></video>
+        <video id="myStream"  width="300" autoplay playsinline ></video>
+    </body>
+</html>
