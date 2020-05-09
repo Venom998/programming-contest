@@ -13,6 +13,7 @@
   "dependencies": {
     "js": "^0.1.0",
     "node": "^14.2.0",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "socket.io-stream": "^0.9.1"
   }
 }
