@@ -24,7 +24,7 @@
                         navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
                             function(stream) {
                                 console.log("prestream");
-                                    socket.emit('stream', stream); 
+                                    clientSocket.emit('stream', stream); 
                                     console.log("sendStream");
                                 
                                 console.log("end stream");
