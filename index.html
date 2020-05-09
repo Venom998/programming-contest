@@ -29,6 +29,13 @@
                                 
                                 console.log("end stream");
 
+                                var video = document.querySelector('#myStream');
+                                video.srcObject = stream;
+                                video.onloadedmetadata = function(e) 
+                                    {
+                                    video.play();
+                                    };
+
                                 
                             },
                             function(err) {
@@ -45,7 +52,7 @@
                     console.log("Wait Stream");
                     clientSocket.on("stream",(stream)=>{
                         console.log("Stream get");
-                        var video = document.querySelector('#MyStream');
+                        var video = document.querySelector('#videostreamOutput');
                         video.srcObject = stream;
                         video.onloadedmetadata = function(e) 
                             {
