@@ -23,7 +23,11 @@
                         if (navigator.getUserMedia) {
                         navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
                             function(stream) {
-                                socket.emit("stream",stream);
+                                
+                                clientSocket.on('streaming', function (data) { //íà streaming
+                                    socket.broadcast.emit('stream', stream); //ïîñûëàåò âñåì ñëóøàòåëåì data
+                                });
+
                                 var video = document.querySelector('#MyStream');
                                 video.srcObject = stream;
                                 video.onloadedmetadata = function(e) 
