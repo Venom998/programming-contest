@@ -11,7 +11,8 @@
                 
                 var offerSent = false;
                 var stream =null;
-                var constraints = { audio: true, video: { width: 1280, height: 720 } }; 
+                var clientSocket = io.connect("https://web-streamer.herokuapp.com:80",{reconnect:true});
+                
 
 
                 
@@ -24,7 +25,29 @@
                         if (navigator.getUserMedia) {
                         navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
                             function(stream) {
-                                var video = document.querySelector('video');
+                                
+                                clientSocket.on('connect',(socket)=>{
+                                    console.log("connected to server!");
+
+                                    socket.emit("stream",stream)
+
+
+                                });
+
+                                clientSocket.on('stream',(stream)=>{
+                                    console.log("GetToServerStream");
+
+                                    var video = document.querySelector('videostreamOutput');
+                                    video.srcObject = stream;
+                                    video.onloadedmetadata = function(e) {
+                                    video.play();
+                                    };
+
+
+                                });
+
+
+                                var video = document.querySelector('#MyStream');
                                 video.srcObject = stream;
                                 video.onloadedmetadata = function(e) {
                                 video.play();
@@ -35,16 +58,7 @@
                             }
                         );
                         } else {
-                            navigator.mediaDevices.getUserMedia(constraints)
-                            .then(function(mediaStream) {
-                            var video = document.querySelector('video');
-                            video.srcObject = mediaStream;
-                            video.onloadedmetadata = function(e) {
-                                video.play();
-                            };
-                            })
-                            .catch(function(err) { console.log(err.name + ": " + err.message); });
-                            console.log("getUserMedia not supported");
+                        console.log("getUserMedia not supported");
                         }
 
                     window.URL = window.URL || window.webkitURL;
@@ -53,36 +67,6 @@
 
                    
                 
-
-                function setupClient(){
-                    clientSocket = io.connect();
-
-
-
-                    function gotOfferDescription(desc){
-                        pc.setLocalDescription(desc);
-                        clientSocket.emit('server_socket', {type:'description', info:desc});
-                    }
-
-                    function gotAnswerDescription(desc){
-                        pc.setLocalDescription(desc);
-                        clientSocket.emit('server_socket', {type:'description', info:desc});
-                    }
-
-                    pc.onicecandidate = function(event){
-                        if(event.candidate){
-                            clientSocket.emit('server_socket', {type:'candidate', info:event.candidate});
-                        }
-                    };
-
-                    pc.onaddstream = function(el){
-                        document.getElementById('videostreamOutput').src = webkitURL.createObjectURL(e.stream);
-                    };
-
-                    pc.onerror = function(){
-                        //error
-                    };
-                };
 
                 
             };

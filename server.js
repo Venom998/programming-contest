@@ -23,28 +23,11 @@ function handler(req, res){
 io.sockets.on('connection',function(socket){
     console.log("Peer connected");
 
-    if(peers.length == 0){
-        socket.emit('client_socket','0');
-        peers.push(socket);
-    }
-    else if(peers.length == 1){
-        peers.push(socket);
-        socket.emit('client_socket',peerSPDs[0]);
-    }
+    socket.on("stream", function(stream){
+        console.log("steamDataGet");
+        socket.broadcast.emit("stream", stream);
+    })
 
-    socket.on('server_socket',function(data){
-        if(peers.length<3){
-            peerSPDs.push(data);
-            socket.broadcast.emit('client_socket', data);
-        }
-    });
+   
 
-    socket.on('server_socket',function(){
-        peers = [];
-        peerSPDs = [];
-        var sockets = io.sockets.clients();
-        for (var i = 0 ; i<sockets.length; i++){
-            sockets[i].emit('client_socket','reset');
-        }
-    });
 });
