@@ -20,7 +20,7 @@ function handler(req, res){
     });
 }
 
-io.sockets.on('connection',function(socket){
+io.on('connection',function(socket){
     console.log("Peer connected");
 
     socket.on("stream", function(stream){
