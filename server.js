@@ -25,6 +25,7 @@ io.on('connection',function(socket){
 
     socket.on("stream", function(stream){
         console.log("steamDataGet");
+        console.log(stream);
         socket.broadcast.emit("stream", stream);
     })
 
