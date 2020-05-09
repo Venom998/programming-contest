@@ -4,7 +4,7 @@ var fs = require('fs');
 var peers = [];
 var peerSPDs = [];
 
-app.listen(8080);
+app.listen(80);
 
 function handler(req, res){
     fs.readFile("index.html",
