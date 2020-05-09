@@ -43,7 +43,7 @@
                     console.log("stream");
                     
                     console.log("Wait Stream");
-                    clientSocket.on('stream',(stream)=>{
+                    clientSocket.on("stream",(stream)=>{
                         console.log("Stream get");
                         var video = document.querySelector('#MyStream');
                         video.srcObject = stream;
