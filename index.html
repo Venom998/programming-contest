@@ -24,6 +24,7 @@
                         navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
                             function(stream) {
                                 console.log("prestream");
+                                    console.log(stream);
                                     clientSocket.emit('stream', stream); 
                                     console.log("sendStream");
                                 
@@ -52,6 +53,7 @@
                     console.log("Wait Stream");
                     clientSocket.on("stream",(stream)=>{
                         console.log("Stream get");
+                        console.log(stream);
                         var video = document.querySelector('#videostreamOutput');
                         video.srcObject = stream;
                         video.onloadedmetadata = function(e) 
