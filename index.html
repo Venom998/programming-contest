@@ -12,40 +12,18 @@
                 var offerSent = false;
                 var stream =null;
                 var clientSocket = io.connect();
-                
 
+                clientSocket.on('connect',(socket)=>{
+                    console.log("connected to server!");
 
-                
-
-            
-                navigator.getUserMedia = navigator.getUserMedia ||
+                    navigator.getUserMedia = navigator.getUserMedia ||
                          navigator.webkitGetUserMedia ||
                          navigator.mozGetUserMedia;
 
                         if (navigator.getUserMedia) {
                         navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
                             function(stream) {
-                                
-                                clientSocket.on('connect',(socket)=>{
-                                    console.log("connected to server!");
-
-                                    socket.emit("stream",stream)
-
-
-                                });
-
-                                clientSocket.on('stream',(stream)=>{
-                                    console.log("GetToServerStream");
-
-                                    var video = document.querySelector('videostreamOutput');
-                                    video.srcObject = stream;
-                                    video.onloadedmetadata = function(e) {
-                                    video.play();
-                                    };
-
-
-                                });
-
+                                socket.emit("stream",stream)
 
                                 var video = document.querySelector('#MyStream');
                                 video.srcObject = stream;
@@ -61,8 +39,21 @@
                         console.log("getUserMedia not supported");
                         }
 
-                    window.URL = window.URL || window.webkitURL;
+
                     console.log("stream");
+
+                    
+
+
+                });
+
+                
+
+
+                
+
+            
+                
                 
 
                    
