@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "js": "^0.1.0",
-    "node": "^14.2.0"
+    "node": "^14.2.0",
+    "socket.io": "^2.3.0"
   }
 }
