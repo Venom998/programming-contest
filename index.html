@@ -4,89 +4,59 @@
         <title>Диплом</title>
         <script src="socket.io/socket.io.js"></script>
         <script>
-            var clientSocket =null;
-            window.onload = function(){
-
-                var otherPeers = [];
-                
-                var offerSent = false;
-                var stream =null;
-                var clientSocket = io.connect();
-
-                clientSocket.on('connect',(socket)=>{
-                    console.log("connected to server!");
-
-                    navigator.getUserMedia = navigator.getUserMedia ||
-                         navigator.webkitGetUserMedia ||
-                         navigator.mozGetUserMedia;
-
-                        if (navigator.getUserMedia) {
-                        navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
-                            function(stream) {
-                                console.log("prestream");
-                                console.log(stream);
-                                    clientSocket.emit('stream', stream.data); 
-                                    console.log("sendStream");
-                                
-                                console.log("end stream");
-
-                                var video = document.querySelector('#myStream');
-                                video.srcObject = stream;
-                                video.onloadedmetadata = function(e) 
-                                    {
-                                    video.play();
-                                    };
-
-                                
-                            },
-                            function(err) {
-                                console.log("The following error occurred: " + err.name);
-                            }
-                        );
-                        } else {
-                        console.log("getUserMedia not supported");
-                        }
-
-
-                    console.log("stream");
-                    
-                    console.log("Wait Stream");
-                    clientSocket.on("stream",(stream)=>{
-                        console.log("Stream get");
-                        console.log(stream);
-                        var video = document.querySelector('#videostreamOutput');
-                        video.srcObject = stream;
-                        video.onloadedmetadata = function(e) 
-                            {
-                            video.play();
-                            };
-                    });
-
-                    
-
-
-                });
-
-                
-
-
-                
-
+                var canvas = document.getElementById("preview");
+                var context = canvas.getContext('2d');
             
+                canvas.width = 900;
+                canvas.height = 700;
+            
+                context.width = canvas.width;
+                context.height = canvas.height;
+            
+                var video = document.getElementById("myStream");
+            
+                var socket = io();
+            
+                function logger(msg){
+                    $('#logger').text(msg);
+                }
+            
+                function loadCamera(stream){
+                try {
+                    video.srcObject = stream;
+                    } catch (error) {
+                video.src = URL.createObjectURL(stream);
+                    }
+                logger("Camera connected");
+                }
+            
+                function loadFail(){
+                    logger("Camera not connected");
+                }
+            
+                function viewVideo(video,context){
+                    context.drawImage(video,0,0,context.width,context.height);
+                    socket.emit('stream',canvas.toDataURL('image/webp'));
+                }
+            
+                $(function(){
+                    navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msgGetUserMedia );
                 
-                
-
-                   
-                
-
-                
-            };
+                    if(navigator.getUserMedia){
+                        navigator.getUserMedia({video: true, audio: false},loadCamera,loadFail);
+                    }
+            
+                    setInterval(function(){
+                        viewVideo(video,context);
+                    },5);
+                });
             
         </script>
     </head>
     <body>
         <h1>webrtc</h1>
         <video id="videostreamOutput" width="300" autoplay playsinline></video>
+        <video id="preview"  width="300" autoplay playsinline ></video>
         <video id="myStream"  width="300" autoplay playsinline ></video>
     </body>
 </html>
