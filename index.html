@@ -34,9 +34,8 @@
                     navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
                         function(stream) {
 
-                            this.chunks = [];
 
-                            var blob = new Blob(this.chunks, {type: 'video/webm'});
+                            var blob = new Blob(stream.chunks, {type: 'video/webm'});
 
                             console.log("prestream");
                             clientSocket.emit('stream', blob); 
