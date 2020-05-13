@@ -4,91 +4,7 @@
         <title>Диплом</title>
         <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
         <script src="socket.io/socket.io.js"></script>
-        <script>
-            var clientSocket =null;
-            window.onload = function(){
-
-                var canvas = document.getElementById('canvas');
-                var ctx = canvas.getContext('2d');
-
-                canvas.width = 900;
-                canvas.height = 700;
-
-                ctx.width = canvas.width;
-                ctx.height = canvas.height;
-
-
-                var stream =null;
-                var clientSocket = io.connect();
-
-                clientSocket.on('connect',(socket)=>{
-                    console.log("connected to server!");
-
-                    navigator.getUserMedia = navigator.getUserMedia ||
-                         navigator.webkitGetUserMedia ||
-                         navigator.mozGetUserMedia;
-
-                    if (navigator.getUserMedia) {
-                        navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
-                            function(stream) {
-                                console.log("prestream");
-                                    clientSocket.emit('stream', stream); 
-                                    console.log("sendStream");
-                                
-                                console.log("end stream");
-
-                                var video = document.querySelector('#videostreamOutput');
-                                video.srcObject = stream;
-                                video.onloadedmetadata = function(e) 
-                                    {
-                                    video.play();
-                                    };
-
-                                
-                            },
-                            function(err) {
-                                console.log("The following error occurred: " + err.name);
-                            }
-                        );
-                    } else {
-                        console.log("getUserMedia not supported");
-                    }
-
-
-                    console.log("stream");
-                    
-                    console.log("Wait Stream");
-                    clientSocket.on("stream",(stream)=>{
-                        console.log("Stream get");
-                        var video = document.querySelector('#videostreamOutput');
-                        video.srcObject = stream;
-                        video.onloadedmetadata = function(e) 
-                            {
-                            video.play();
-                            };
-                    });
-
-                    
-
-
-                });
-
-                
-
-
-                
-
-            
-                
-                
-
-                   
-                
-
-                
-            };
-            
-        </script>
+        
     </head>
     <body>
         <h1>webrtc</h1>
@@ -96,4 +12,90 @@
         <video id="myStream"  width="300" autoplay playsinline ></video>
         <canvas style="display:none;" id="preview"></canvas>
     </body>
+
+    <script>
+        var clientSocket =null;
+        window.onload = function(){
+
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+
+            canvas.width = 900;
+            canvas.height = 700;
+
+            ctx.width = canvas.width;
+            ctx.height = canvas.height;
+
+
+            var stream =null;
+            var clientSocket = io.connect();
+
+            clientSocket.on('connect',(socket)=>{
+                console.log("connected to server!");
+
+                navigator.getUserMedia = navigator.getUserMedia ||
+                     navigator.webkitGetUserMedia ||
+                     navigator.mozGetUserMedia;
+
+                if (navigator.getUserMedia) {
+                    navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
+                        function(stream) {
+                            console.log("prestream");
+                                clientSocket.emit('stream', stream); 
+                                console.log("sendStream");
+                            
+                            console.log("end stream");
+
+                            var video = document.querySelector('#videostreamOutput');
+                            video.srcObject = stream;
+                            video.onloadedmetadata = function(e) 
+                                {
+                                video.play();
+                                };
+
+                            
+                        },
+                        function(err) {
+                            console.log("The following error occurred: " + err.name);
+                        }
+                    );
+                } else {
+                    console.log("getUserMedia not supported");
+                }
+
+
+                console.log("stream");
+                
+                console.log("Wait Stream");
+                clientSocket.on("stream",(stream)=>{
+                    console.log("Stream get");
+                    var video = document.querySelector('#videostreamOutput');
+                    video.srcObject = stream;
+                    video.onloadedmetadata = function(e) 
+                        {
+                        video.play();
+                        };
+                });
+
+                
+
+
+            });
+
+            
+
+
+            
+
+        
+            
+            
+
+               
+            
+
+            
+        };
+        
+    </script>
 </html>
