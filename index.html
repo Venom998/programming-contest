@@ -8,17 +8,16 @@
     </head>
     <body>
         <h1>webrtc</h1>
-        <video id="videostreamOutput" width="300" autoplay playsinline></video>he
+        <video id="videostreamOutput" width="300" autoplay playsinline></video>
         <video id="myStream"  width="300" autoplay playsinline ></video>
-        <canvas style="display:none;" id="preview"></canvas>
+        
     </body>
 
     <script>
         var clientSocket =null;
         window.onload = function(){
 
-            var canvas = document.getElementById('canvas');
-            var ctx = canvas.getContext('2d');
+           
 
             canvas.width = 900;
             canvas.height = 700;
