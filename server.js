@@ -1,5 +1,6 @@
 var app = require('http').createServer(handler);
 var io = require('socket.io').listen(app);
+var ss = require('socket.io-stream');
 var fs = require('fs');
 var peers = [];
 var peerSPDs = [];
