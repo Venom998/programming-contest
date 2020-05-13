@@ -12,9 +12,9 @@
                 var offerSent = false;
                 var stream =null;
                 var clientSocket = io.connect();
+                var SocketStream = ss.createStream();
 
-
-                clientSocket.on('connection', function (socket) {
+                clientSocket.on('connect',(socket)=>{
                     console.log("connected to server!");
 
                     navigator.getUserMedia = navigator.getUserMedia ||
@@ -26,15 +26,9 @@
                             function(stream) {
                                 console.log("prestream");
                                     console.log(stream);
-
-                                    ss(socket).on('hot', function (stream, data) {
-                                        const _stream = ss.createStream();
-                                        ss(clientSocket).emit('hot', _stream);
-                                        stream.pipe(_stream);
-                                    });
-
-
                                     
+                                    ss(clientSocket).emit("stream", SocketStream, stream);
+                                    fs.createReadStream(stream).pipe(SocketStream);
                                     console.log("sendStream");
                                 
                                 console.log("end stream");
