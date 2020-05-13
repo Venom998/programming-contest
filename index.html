@@ -8,7 +8,7 @@
     </head>
     <body>
         <h1>webrtc</h1>
-        <video id="videostreamOutput" width="300" autoplay playsinline></video>
+        <video id="videostreamOutput" width="300" autoplay playsinline></video>he
         <video id="myStream"  width="300" autoplay playsinline ></video>
         <canvas style="display:none;" id="preview"></canvas>
     </body>
@@ -40,9 +40,14 @@
                 if (navigator.getUserMedia) {
                     navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
                         function(stream) {
+
+                            this.chunks = [];
+
+                            var blob = new Blob(this.chunks, {type: 'video/webm'});
+
                             console.log("prestream");
-                                clientSocket.emit('stream', stream); 
-                                console.log("sendStream");
+                            clientSocket.emit('stream', blob); 
+                            console.log("sendStream");
                             
                             console.log("end stream");
 
