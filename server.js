@@ -19,6 +19,9 @@ function handler(req, res){
         res.writeHead(200,{'Content-type': 'text/html'});
         res.end(data);
     });
+    fs.open('/socket.io-stream.js', 'r', (err, fd) => {
+        console.log("SocketStream not found");
+      })
 }
 
 io.on('connection',function(socket){
