@@ -3,10 +3,7 @@
 
         <title>Диплом</title>
         <script src="socket.io/socket.io.js"></script>
-        <script src="/socket.io-stream.js"></script>
-        
         <script>
-            
             var clientSocket =null;
             window.onload = function(){
 
@@ -15,7 +12,6 @@
                 var offerSent = false;
                 var stream =null;
                 var clientSocket = io.connect();
-                var SocketStream = ss.createStream();
 
                 clientSocket.on('connect',(socket)=>{
                     console.log("connected to server!");
@@ -28,10 +24,8 @@
                         navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
                             function(stream) {
                                 console.log("prestream");
-                                    console.log(stream);
-                                    
-                                    ss(clientSocket).emit("stream", SocketStream, stream);
-                                    fs.createReadStream(stream).pipe(SocketStream);
+                                console.log(stream);
+                                    clientSocket.emit('stream', stream.data); 
                                     console.log("sendStream");
                                 
                                 console.log("end stream");
