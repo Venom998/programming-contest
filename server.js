@@ -1,9 +1,5 @@
 var app = require('http').createServer(handler);
-var io = require('socket.io').listen(app);
-var ss = require('socket.io-stream');
 var fs = require('fs');
-var peers = [];
-var peerSPDs = [];
 var port = process.env.PORT || 3000;
 
 app.listen(port);
@@ -21,15 +17,22 @@ function handler(req, res){
     });
 }
 
-io.on('connection',function(socket){
-    console.log("Peer connected");
+const { exec } = require("child_process");
 
-    socket.on("stream", function(stream){
-        console.log("steamDataGet");
-        console.log(stream);
-        socket.broadcast.emit("stream", stream);
-    })
-
-   
-
+exec("py scripts/test_py.py < input.txt",{timeout: 3000}, (error, stdout, stderr) => {
+    if (error) {
+        console.log(`error: ${error.message}`);
+        return;
+    }
+    if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        return;
+    }
+    console.log(`stdout: ${stdout}`);
+    console.log(stdout);
+    if (stdout=='5') {
+        console.log("Тест пройден");
+    } else{
+        console.log("Тест не пройден");
+    }
 });
